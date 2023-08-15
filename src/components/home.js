@@ -1,28 +1,36 @@
-function home (navigateTo){
-    const contenedorGeneral = document.createElement ('div');
-    contenedorGeneral.className='contenedor'
-    contenedorGeneral.textContent = 'hola'
-    const section = document.createElement('section'); 
-    const title = document.createElement('h2');
-    const buttonInicio = document.createElement('button');
-    const buttonRegistro =document.createElement('button');
-    
-    buttonInicio.textContent = 'Iniciar sección'
-    buttonInicio.addEventListener('click', () => {
-        navigateTo('/login');
-    });
-    
+function home(navigateTo) {
+  const divHome = document.createElement('div');
+  divHome.className = 'divHome';
 
-    buttonRegistro.textContent = 'Registrate'
-    buttonRegistro.addEventListener('click', () => {
-        navigateTo('/registro');
-    });
+  const logoBonHome = document.createElement('img');
+  logoBonHome.className = 'logoBonHome';
 
-    title.textContent = 'BIENVENIDOS A BON-BON';
+  const buttonInicio = document.createElement('button');
+  buttonInicio.className = 'button buttonSignInHome';
+  buttonInicio.textContent = 'Inicia sesión';
 
+  const buttonParrafo = document.createElement('h2');
+  buttonParrafo.textContent = 'Y si no tienes cuenta...';
 
-   contenedorGeneral.append(section,title, buttonInicio, buttonRegistro);
-    return contenedorGeneral;
+  const buttonRegistro = document.createElement('button');
+  buttonRegistro.className = 'button buttonLoginHome';
+
+  buttonInicio.addEventListener('click', () => {
+    navigateTo('/login');
+  });
+
+  buttonRegistro.textContent = 'Regístrate';
+
+  buttonRegistro.addEventListener('click', () => {
+    navigateTo('/registro');
+  });
+
+  divHome.appendChild(logoBonHome);
+  divHome.appendChild(buttonInicio);
+  divHome.appendChild(buttonParrafo);
+  divHome.appendChild(buttonRegistro);
+
+  return divHome;
 }
 
 export default home;
