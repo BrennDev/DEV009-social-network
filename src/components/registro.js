@@ -1,14 +1,21 @@
-import { registerWithEmail, signInWithGoogle } from '../lib/index';
+import { registerWithEmail } from '../lib/index';
 
 function registro(navigateTo) {
   const divRegister = document.createElement('div');
   divRegister.className = 'divRegister';
 
-  const logoBon = document.createElement('img');
-  logoBon.className = 'logoBon';
+  const headerRegistro = document.createElement('header');
+  headerRegistro.className = 'headerRegistro';
+
+  const logoBonBon = document.createElement('img');
+  logoBonBon.className = 'logoBon';
+
+  const mainRegistro = document.createElement('main');
+  mainRegistro.className = 'mainRegistro';
 
   const formRegistro = document.createElement('form');
   formRegistro.className = 'formRegistro';
+
   const inputName = document.createElement('input');
   inputName.className = 'input displayName';
   inputName.setAttribute('type', 'text');
@@ -25,11 +32,33 @@ function registro(navigateTo) {
   inputPass.className = 'input inputPass';
   inputPass.setAttribute('type', 'password');
   inputPass.setAttribute('placeholder', 'Crea tu contraseña');
+  inputPass.setAttribute('minlength', '6');
   inputPass.required = true;
+
+  const showPassword = document.createElement('div');
+  showPassword.className = 'show-password';
+
+  const showPasswordText = document.createElement('label');
+  showPasswordText.className = 'show-password-text';
+  showPasswordText.setAttribute('for', 'password-checkbox');
+  showPasswordText.textContent = 'Mostrar contraseña';
+
+  const showPasswordCheckbox = document.createElement('input');
+  showPasswordCheckbox.className = 'show-password-checkbox';
+  showPasswordCheckbox.setAttribute('type', 'checkbox');
+  showPasswordCheckbox.setAttribute('name', 'password-checkbox');
+
+  showPasswordCheckbox.addEventListener('click', () => {
+    inputPass.type = inputPass.type === 'password'
+      ? inputPass.type = 'text'
+      : inputPass.type = 'password';
+  });
+
+  showPassword.append(showPasswordCheckbox, showPasswordText);
 
   const buttonRegistro = document.createElement('input');
   buttonRegistro.setAttribute('type', 'submit');
-  buttonRegistro.className = 'button buttonSignInRegistro';
+  buttonRegistro.className = 'button buttonEnviarRegistro';
   buttonRegistro.textContent = 'Registro';
 
   const buttonReturn = document.createElement('button');
@@ -38,21 +67,8 @@ function registro(navigateTo) {
 
   const errorRegister = document.createElement('p');
   errorRegister.className = 'parrafo';
-  errorRegister.textContent = 'errorMessage';
   errorRegister.style.display = 'none';
   errorRegister.id = 'errorRegister';
-
-  const buttonGoogle = document.createElement('button');
-  buttonGoogle.className = 'button buttonGoogle';
-  const strong = document.createElement('strong');
-  strong.textContent = 'Google';
-  strong.className = 'textGoogle';
-  const imgGoogle = document.createElement('img');
-  imgGoogle.className = 'imgGoogle';
-
-  const textRegistrateCon = document.createElement('p');
-  textRegistrateCon.className = 'parrafo';
-  textRegistrateCon.textContent = 'O registrate con...';
 
   formRegistro.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -66,27 +82,12 @@ function registro(navigateTo) {
       nameValue,
     )
       .then(() => {
-        navigateTo('/principal');
+        alert('Correo de verificación enviado');
+        navigateTo('/login');
       })
-      .catch((error) => {
-        const errorCode = error.code;
-        if (errorCode === 'auth/weak-password') {
-          errorRegister.style.display = 'block';
-          errorRegister.textContent = 'La contraseña debe tener al menos 6 caracteres';
-        } else if (errorCode === 'auth/invalid-email') {
-          errorRegister.style.display = 'block';
-          errorRegister.textContent = 'Email invalido';
-        } else if (errorCode === 'auth/missing-email') {
-          errorRegister.style.display = 'block';
-          errorRegister.textContent = 'Falta colocar correo';
-        } else if (errorCode === 'auth/email-already-in-use') {
-          errorRegister.style.display = 'block';
-          errorRegister.textContent = 'El correo electrónico ya se encuentra registrado';
-        } else if (errorCode === 'auth/internal-error') {
-          errorRegister.style.display = 'block';
-          errorRegister.textContent = 'Falta colocar contraseña';
-        }
-        return error;
+      .catch(() => {
+        errorRegister.style.display = 'block';
+        errorRegister.textContent = 'Ya existe una cuenta para ese correo electrónico o el correo es inválido.';
       });
   });
 
@@ -94,24 +95,19 @@ function registro(navigateTo) {
     navigateTo('/');
   });
 
-  divRegister.appendChild(logoBon);
-  divRegister.appendChild(formRegistro);
-  formRegistro.append(inputName, inputEmail, inputPass, buttonRegistro);
-  divRegister.appendChild(errorRegister);
-  divRegister.appendChild(textRegistrateCon);
-  divRegister.appendChild(buttonGoogle);
-  buttonGoogle.append(imgGoogle, strong);
-  divRegister.appendChild(buttonReturn);
+  divRegister.append(headerRegistro, mainRegistro);
 
-  buttonGoogle.addEventListener('click', () => {
-    signInWithGoogle()
-      .then(() => {
-        navigateTo('/principal');
-      })
-      .catch(() => {
-        navigateTo('/'); // si nos marca error nos manda al home
-      });
-  });
+  headerRegistro.append(logoBonBon);
+  mainRegistro.append(formRegistro, buttonReturn);
+  formRegistro.append(
+    inputName,
+    inputEmail,
+    inputPass,
+    showPassword,
+    errorRegister,
+    buttonRegistro,
+  );
+
   return divRegister;
 }
 

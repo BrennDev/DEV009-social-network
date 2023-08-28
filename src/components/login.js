@@ -1,12 +1,20 @@
-import { signInWithPassword } from '../lib/index';
+import { loginWithEmail, signInWithGoogle } from '../lib/index';
 
 function login(navigateTo) {
   const divLogin = document.createElement('div');
   divLogin.className = 'divLogin';
 
-  const logoBon = document.createElement('img');
-  logoBon.className = 'logoBon';
+  const headerLogin = document.createElement('header');
+  headerLogin.className = 'headerLogin';
 
+  const logoBonBon = document.createElement('img');
+  logoBonBon.className = 'logoBon';
+
+  const mainLogin = document.createElement('main');
+  mainLogin.className = 'mainLogin';
+
+  const formLogin = document.createElement('form');
+  formLogin.className = 'formLogin';
   const inputEmail = document.createElement('input');
   inputEmail.className = 'input inputEmail';
   inputEmail.setAttribute('type', 'email');
@@ -19,19 +27,34 @@ function login(navigateTo) {
   inputPass.setAttribute('placeholder', 'Ingresa tu contraseña');
   inputPass.setAttribute('required', '');
 
-  const buttonLogin = document.createElement('button');
+  const buttonLogin = document.createElement('input');
   buttonLogin.className = 'button buttonLogin';
+  buttonLogin.setAttribute('type', 'submit');
   buttonLogin.textContent = 'Inicia sesión';
 
   const buttonReturn = document.createElement('button');
   buttonReturn.className = 'button buttonReturnLogin';
   buttonReturn.textContent = 'Regresar';
+  const showPassword = document.createElement('div');
+  showPassword.className = 'show-password';
 
-  const errorMessageL = document.createElement('p');
-  errorMessageL.className = 'parrafo';
-  errorMessageL.textContent = 'errorMessage';
-  errorMessageL.style.display = 'none';
-  errorMessageL.id = ' errorMessageL';
+  const showPasswordText = document.createElement('label');
+  showPasswordText.className = 'show-password-text';
+  showPasswordText.setAttribute('for', 'password-checkbox');
+  showPasswordText.textContent = 'Mostrar contraseña';
+
+  const showPasswordCheckbox = document.createElement('input');
+  showPasswordCheckbox.className = 'show-password-checkbox';
+  showPasswordCheckbox.setAttribute('type', 'checkbox');
+  showPasswordCheckbox.setAttribute('name', 'password-checkbox');
+
+  showPasswordCheckbox.addEventListener('click', () => {
+    inputPass.type = inputPass.type === 'password'
+      ? inputPass.type = 'text'
+      : inputPass.type = 'password';
+  });
+
+  showPassword.append(showPasswordCheckbox, showPasswordText);
 
   const buttonGoogle = document.createElement('button');
   buttonGoogle.className = 'button buttonGoogle';
@@ -49,32 +72,34 @@ function login(navigateTo) {
     navigateTo('/');
   });
 
-  divLogin.appendChild(logoBon);
-  divLogin.append(inputEmail, inputPass);
-  divLogin.appendChild(errorMessageL);
-  divLogin.appendChild(buttonLogin);
-  divLogin.appendChild(textRegistrateCon);
-  divLogin.appendChild(buttonGoogle);
+  divLogin.append(headerLogin, mainLogin);
+  headerLogin.appendChild(logoBonBon);
+  mainLogin.append(formLogin, textRegistrateCon, buttonGoogle, buttonReturn);
+  formLogin.append(inputEmail, inputPass, showPassword, buttonLogin);
   buttonGoogle.append(imgGoogle, strong);
-  divLogin.appendChild(buttonReturn);
 
-  buttonLogin.addEventListener('click', () => {
+  formLogin.addEventListener('submit', (e) => {
+    e.preventDefault();
     const emailValue = inputEmail.value;
     const passwordValue = inputPass.value;
-    console.log(emailValue);
-    if (emailValue === '' || passwordValue === '') {
-      errorMessageL.style.display = 'block';
-      errorMessageL.textContent = 'Los campos no pueden estar vacios';
-    } else {
-      const user = {
-        email: emailValue,
-        emailPassword: passwordValue,
-      };
-      signInWithPassword(user.email, user.emailPassword)
-        .then(() => {
+    loginWithEmail(emailValue, passwordValue)
+      .then((user) => {
+        if (user.emailVerified) {
           navigateTo('/principal');
-        });
-    }
+        } else {
+          alert('Primero verifica tu correo electrónico');
+        }
+      });
+  });
+
+  buttonGoogle.addEventListener('click', () => {
+    signInWithGoogle()
+      .then(() => {
+        navigateTo('/principal');
+      })
+      .catch(() => {
+        navigateTo('/'); // si nos marca error nos manda al home
+      });
   });
   return divLogin;
 }
