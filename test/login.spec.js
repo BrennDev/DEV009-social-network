@@ -28,7 +28,7 @@ describe('función Login', () => {
     loginWithEmail.mockClear();
   });
 
-  test('Al hacer click tiene que ir a la pagina home', () => {
+  test('Deberia dirigir a la pagina de home al hacer click', () => {
     const btnReturn = loginElement.querySelector('.buttonReturnLogin');
     btnReturn.click();
     expect(navigateTo).toHaveBeenCalledWith('/');
@@ -59,7 +59,7 @@ describe('función Login', () => {
       expect(alert).toBe(alert);
     });
   });
-  test('Al hacer click en el checkbox se puede mostrar o esconder la contraseña', () => {
+  test('Deberia mostrar u ocultar la contraseña al hacer click', () => {
     const checkbox = loginElement.querySelector('.show-password-checkbox');
 
     expect(inputPass.type).toBe('password');
