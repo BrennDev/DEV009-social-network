@@ -46,12 +46,20 @@ body{
   margin-top: 10%;
 }
 
-.formRegistro, .formLogin {
+.formRegistro, .formLogin, .formPost {
   display: flex;
   flex-direction: column;
   justify-content:center;
   align-items:center;
   position: relative;
+}
+
+.formPostUser {
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items:center;
+  margin-top: 1%;
 }
 
 .logoBonHome {
@@ -155,17 +163,18 @@ body{
   font-weight: bold;
 }
 
-.mainPrincipal{
-  width: 90%;
+.mainPrincipal, .mainEditar {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content:center;
   align-items:center;
-  margin-top: 39%;
+  margin-top: 41%;
   padding:0 8%;
 }
 
-.textAllPostUsers{
+
+.textAllPostUsers, .textTituleUser, .misPublicaciones {
   margin-top: 3%;
   font-size: smaller;
   font-weight: bold;
@@ -195,14 +204,26 @@ body{
 .divMenu{
   background-color: var(--recetarioColor);
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   margin-top: 25%;
-  padding: 1%;
+  padding: 0.5%;
+  
 }
 
+.sectionHomeIcon, .sectionRecetaIcon, .sectionSingOutIcon{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.homeText, .misRecetasText, .singOutText{
+  font-size: smaller;
+}
 
 footer {
-  margin-top: 3%;
+  margin-top: 6%;
   text-align: center;
 }
 
@@ -250,56 +271,159 @@ footer {
 .sectionRecetaTitle {
   margin:1em;
   font-weight: bold;
+  font-size: smaller;
 }
 
-.formPost{
+.escritosfijos{
+  font-weight: bold;
+  padding: 1em;
+  font-size: smaller;
+}
+
+.recetaTitle{
+  width: 100%;
+  height: 50%; 
+  text-align:center;
+  border-radius: 1em;
+  border: 2px solid var(--sloganColor);
+  font-size: smaller;
+}
+
+.ingredientesUser {
+  width: 100%;
+  height: 150px;
+  text-align:center;
+  border-radius: 1em;
+  border: 2px solid var(--sloganColor);
+  font-size: smaller;
+}
+
+.preparacionUser {
+  width: 100%;
+  height: 200px;
+  text-align:center;
+  cursor: pointer;
+  border-radius: 1em;
+  border: 2px solid var(--sloganColor);
+  font-size: smaller;
+}
+
+/*MODAL*/
+.modal, .editBox {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.sectionModal {
+  margin: auto;
+  display: grid;
+  place-items: center;
+  background-color: var(--primary);
+  margin-top: 25%;
+  height: 15em;
+  width: 20em;
+}
+
+.sectionBoxContent{
+  margin: auto;
+  display: grid;
+  place-items: center;
+  background-color: var(--primary);
+  margin-top: 25%;
+  height: auto;
+  width: 90%;
+}
+
+.editForm{
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  margin-top: 0;
+  padding: 2%;
 }
-.escritosfijos{
+
+.modalTitleEdit{
+  margin-top: 2%;
+}
+
+.editTitle {
+  height: 2em;
+  width: 16em;
+  margin: 2%;
+  text-align: center;
+}
+
+.editIngredients {
+  height: 8em;
+  width: 16em;
+  margin: 2%;
+}
+
+.editPreparation {
+  height: 10em;
+  width: 16em;
+  margin: 2%;
+}
+
+
+.modalConfirmation, .modalCancelbtn, .confirmEdit, .cancelEdit, .btnDeletePost, .btnEditPost, .btn-post{
+  width: 100px;
+  height: 30px;
   font-weight: bold;
-  padding: 1em;
+  border-radius: 40px;
+  border: 2px solid var(--secondary);
+  background: var(--secondary) ;
+  text-align: center;
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.6);
+  margin: 1em;
+  cursor: pointer;
 }
-.recetaTitulo{
-  width: 100%;
-  height: 50%; 
+
+.btnDeletePost, .btnEditPost, .reactionButton{
+  width: 70px;
+  height: 20px;
+  font-size: small;
+  font-weight: bold;
+  border-radius: 30px;
+  border: 1px solid var(--secondary);
+  background: var(--secondary) ;
+  text-align: center;
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.6);
+  
+  cursor: pointer;
 }
-.ingredientesUser {
-  width: 100%;
-  height: 150px;
-}
-.preparacionUser {
-  width: 100%;
-  height: 200px;
-}
-.btn-post{
+
+.footerEndPost{
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  margin: 1em;
-
+  width: 100%;
 }
+
 
 /* small tablet styles */
 @media screen and (min-width: 620px){
   .logoBonHome{
-    padding: 20%;
+    padding: 18%;
   }
 
   .sectionHome{
-    scale: 1.2;
+    scale: 1.1;
   }
 
   .logoBon{
-    padding: 20%;
+    padding: 18%;
   }
 
   .mainRegistro, .mainLogin{
-    scale: 1.1;
+    scale: 1.05;
   }
   
   .headerRegistro, .headerLogin{
@@ -315,16 +439,20 @@ footer {
     margin-top: 18%;
   }
 
-  .mainPrincipal{
+  .mainPrincipal {
     margin-top: 27%;
   }
 
+  .mainEditar{
+    scale: 1.05;
+    margin-top: 30%;
+  }
   .recetaUser {
     margin-top: 1%;
     font-size: medium;
   }
 
-  .textAllPostUsers{
+  .textAllPostUsers, .textTituleUser, .misPublicaciones, .homeText, .misRecetasText, .singOutText, .escritosfijos, .recetaTitle, .ingredientesUser, .preparacionUser{
     font-size: medium;
   }
 
@@ -342,6 +470,30 @@ footer {
     font-size: medium;
   }
 
+  .btnDeletePost, .btnEditPost, .reactionButton{
+    width: 100px;
+    height: 30px;
+    border-radius: 40px;
+    border: 2px solid var(--secondary); 
+    box-shadow: 1px 2px 4px rgba(0,0,0,0.6);
+    margin: 1em;
+  }
+
+  .editTitle {
+    height: 2cap;
+    width: 24em;
+  }
+  
+  .editIngredients {
+    height: 8em;
+    width: 24em;
+  }
+  
+  .editPreparation {
+    height: 12em;
+    width: 24em;
+  }
+
 }
 
 /* large tablets & laptop styles */
@@ -350,8 +502,8 @@ footer {
     margin-top: 7%;
   }
 
-  .sectionHome{
-    scale: 1.3;
+  .logoBonHome{
+    padding: 16%;
   }
 
   .headerRegistro, .headerLogin{
@@ -375,10 +527,30 @@ footer {
     margin-top: 16%;
   }
 
-  .mainPrincipal{
+  .mainPrincipal {
     margin-top: 23%;
   }
+
+  .mainEditar{
+    scale: 1.1;
+    margin-top: 25%;
+  }
+
+  .sectionBoxContent{
+    margin-top: 12%;
+  }
+
+  .sectionModal {
+    height: 20em;
+    width: 30em;
+    margin-top: 10%;
   
+  }
+
+  .recetaTitle{
+    width: 30em;
+  }
+
 }
 
 /* desktop styles */
@@ -411,18 +583,55 @@ footer {
     margin-top: 12%;
   }
 
-  .mainPrincipal{
+  .mainPrincipal {
+    margin-top: 18%;
+  }
+
+  .mainEditar{
     margin-top: 18%;
   }
 
   .textAllPostUsers, .author, .recetaUser{
-    font-size: large;
+      font-size:larger;
+  }
+  .textAllPostUsers, .textTituleUser, .misPublicaciones, .homeText, .misRecetasText, .singOutText, .escritosfijo, .recetaTitle, .ingredientesUser, .preparacionUser{
+    font-size: larger;
   }
 
   .titlePost, .ingredients, .preparation{
     margin-top: 2%;
     font-size: larger;
   }
+  .btnDeletePost, .btnEditPost, .reactionButton{
+    width: 150px;
+    height: 40px;
+    border-radius: 40px;
+    border: 2px solid var(--secondary); 
+    box-shadow: 1px 2px 4px rgba(0,0,0,0.6);
+    margin: 1em;
+    font-size: larger;
+  }
+
+  .sectionBoxContent{
+    margin-top: 8%;
+    width: 50%;
+  }
+
+  .editTitle {
+    height: 2cap;
+    width: 28em;
+  }
+  
+  .editIngredients {
+    height: 8em;
+    width: 28em;
+  }
+  
+  .editPreparation {
+    height: 12em;
+    width: 28em;
+  }
+
 
 }
-  
+

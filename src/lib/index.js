@@ -72,6 +72,20 @@ export async function createPost(username, titulo, ingredientes, preparacion, ti
   }
 }
 
+// Eliminar Post
+export const deletePost = (postId) => deleteDoc(doc(db, 'Post', postId));
+
+// Editar Post
+export async function updatePost(postId, newData) {
+  try {
+    const postRef = doc(db, 'Post', postId);
+    await updateDoc(postRef, newData);
+    console.log('Post updated successfully');
+  } catch (e) {
+    console.error('Error updating post: ', e);
+  }
+}
+
 export async function displayAllPosts() {
   try {
     const querySnapshot = await getDocs(query(collection(db, 'Post'), orderBy('date', 'desc')));
@@ -172,14 +186,17 @@ export async function displayUserPosts(user) {
         postDiv.className = 'post';
         postDiv.setAttribute('data-post-id', postId);
 
-        const headerUserInfo = document.createElement('div');
+        const headerUserInfo = document.createElement('header');
         headerUserInfo.className = 'headerUserInfo';
 
-        const author = document.createElement('p');
+        const author = document.createElement('h1');
         author.textContent = `${data.author}`;
         author.className = 'author';
 
-        const title = document.createElement('p');
+        const articlePostUsers = document.createElement('article');
+        articlePostUsers.className = 'articlePostUsers';
+
+        const title = document.createElement('h2');
         title.textContent = data.title;
         title.className = 'titlePost';
 
@@ -191,8 +208,8 @@ export async function displayUserPosts(user) {
         preparation.textContent = data.preparation;
         preparation.className = 'preparation';
 
-        const footerEndPost = document.createElement('div');
-        footerEndPost.className = 'divButtom-post';
+        const footerEndPost = document.createElement('footer');
+        footerEndPost.className = 'footerEndPost';
 
         const divReaction = document.createElement('div');
         divReaction.className = 'divReaction';
@@ -229,10 +246,77 @@ export async function displayUserPosts(user) {
           }
         });
 
+        const divDeleEdit = document.createElement('div');
+        divDeleEdit.className = 'div-delete-edit';
+
+        const modal = document.querySelector('.modal');
+
+        const btnDeletePost = document.createElement('button');
+        btnDeletePost.textContent = 'Borrar';
+        btnDeletePost.className = 'btnDeletePost';
+        btnDeletePost.addEventListener('click', () => {
+          modal.style.display = 'block';
+
+          const buttonDelete = document.querySelector('.modalConfirmation');
+          buttonDelete.addEventListener('click', () => {
+            deletePost(postId);
+            postDiv.remove();
+            modal.style.display = 'none';
+          });
+
+          const buttonCancel = document.querySelector('.modalCancel');
+          buttonCancel.addEventListener('click', () => {
+            modal.style.display = 'none';
+          });
+        });
+
+        const btnEditPost = document.createElement('button');
+        btnEditPost.textContent = 'Editar';
+        btnEditPost.className = 'btnEditPost';
+        btnEditPost.addEventListener('click', () => {
+          const editBox = document.querySelector('.editBox');
+          editBox.style.display = 'block';
+
+          const editTitle = document.querySelector('.editTitle');
+          const editTextIngredients = document.querySelector('.editIngredients');
+          const editTextPreparation = document.querySelector('.editPreparation');
+
+          editTitle.value = data.title;
+          editTextIngredients.value = data.ingredients;
+          editTextPreparation.value = data.preparation;
+
+          const editForm = document.querySelector('.editForm');
+          editForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newTitle = editTitle.value;
+            const newTextIngredients = editTextIngredients.value;
+            const newTextPreparation = editTextPreparation.value;
+
+            const newData = {
+              title: newTitle,
+              ingredients: newTextIngredients,
+              preparation: newTextPreparation,
+            };
+
+            await updatePost(postId, newData);
+
+            editBox.style.display = 'none';
+            postsSection.innerHTML = '';
+            await displayUserPosts(user);
+
+            const cancelEdit = document.querySelector('.cancelEdit');
+            cancelEdit.addEventListener('click', () => {
+              editBox.style.display = 'none';
+            });
+          });
+        });
+
         headerUserInfo.append(author);
         divReaction.append(reaction);
-        footerEndPost.append(divReaction);
-        postDiv.append(headerUserInfo, title, ingredients, preparation, footerEndPost);
+        divDeleEdit.append(btnEditPost, btnDeletePost);
+        footerEndPost.append(divReaction, divDeleEdit);
+        articlePostUsers.append(title, ingredients, preparation);
+        postDiv.append(headerUserInfo, articlePostUsers, footerEndPost);
         postsSection.appendChild(postDiv);
       });
     }
@@ -240,6 +324,3 @@ export async function displayUserPosts(user) {
     console.error('Error al actualizar: ', e);
   }
 }
-
-// Eliminar Post
-export const deletePost = (postId) => deleteDoc(doc(db, 'Post', postId));
